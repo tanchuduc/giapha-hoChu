@@ -26,6 +26,7 @@ export default async function EventsPage() {
       supabase
         .from('persons')
         .select(EVENT_PERSON_COLUMNS)
+        .is('deleted_at', null)
         .or(EVENT_PERSON_FILTER)
         .order('id')
         .range(from, to)

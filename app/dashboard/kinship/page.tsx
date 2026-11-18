@@ -27,6 +27,7 @@ export default async function KinshipPage() {
         .select(
           'id, full_name, gender, birth_year, birth_month, birth_day, birth_order, generation, is_in_law, avatar_url, updated_at'
         )
+        .is('deleted_at', null)
         .order('birth_year', { ascending: true, nullsFirst: false })
         .order('id')
         .range(from, to)

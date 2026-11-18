@@ -59,6 +59,7 @@ export default function GlobalMemberSearch() {
       supabase
         .from('persons')
         .select(GLOBAL_SEARCH_COLUMNS)
+        .is('deleted_at', null)
         .order('full_name')
         .order('id')
         .range(from, to)

@@ -7,7 +7,9 @@ import DashboardHeader from '@/components/DashboardHeader'
 import Footer from '@/components/Footer'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import LogoutButton from '@/components/LogoutButton'
+import BottomTabBar from '@/components/navigation/BottomTabBar'
 import { UserProvider } from '@/components/UserProvider'
+import { TextSizeProvider } from '@/context/TextSizeContext'
 import { getServerTranslations } from '@/lib/i18n/server'
 import { getProfile, getUser } from '@/utils/supabase/queries'
 
@@ -76,14 +78,17 @@ export default async function DashboardLayout({
 
   return (
     <UserProvider user={user} profile={profile}>
-      <div className='flex min-h-screen flex-col bg-neutral font-sans text-primary print:bg-white'>
-        <DashboardHeader />
-        {children}
-        <Footer
-          className='mt-auto border-t border-stone-200 bg-white'
-          showDisclaimer={true}
-        />
-      </div>
+      <TextSizeProvider>
+        <div className='flex min-h-screen flex-col pb-16 lg:pb-0 bg-neutral font-sans text-primary print:bg-white print:pb-0'>
+          <DashboardHeader />
+          {children}
+          <Footer
+            className='mt-auto border-t border-stone-200 bg-white'
+            showDisclaimer={true}
+          />
+          <BottomTabBar />
+        </div>
+      </TextSizeProvider>
     </UserProvider>
   )
 }

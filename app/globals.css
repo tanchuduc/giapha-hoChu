@@ -207,3 +207,12 @@ select {
 .label-md {
   @apply font-sans text-sm leading-[1.4] font-medium;
 }
+
+/* Accessibility: Text Scaling for Elderly Users */
+html.text-scale-large {
+  font-size: 112.5%;
+}
+
+html.text-scale-extra-large {
+  font-size: 125%;
+}

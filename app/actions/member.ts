@@ -55,9 +55,12 @@ export async function deleteMemberProfile(memberId: string) {
     }
   }
 
-  // 3. Delete the member row, then its avatar file
+  // 3. Soft-delete the member row (marks deleted_at, keeps avatar and relations safe)
   try {
-    await deleteMember(supabase, memberId)
+    await deleteMember(supabase, memberId, {
+      soft: true,
+      deletedBy: user.id
+    })
   } catch (err) {
     if (err instanceof PersonNotDeletedError) {
       return { error: t('memberDeleteAccessDenied') }
@@ -69,6 +72,49 @@ export async function deleteMemberProfile(memberId: string) {
   // 4. Revalidate and redirect
   revalidatePath('/dashboard/members')
   redirect('/dashboard/members')
+}
+
+export async function restoreMemberProfile(memberId: string) {
+  const [user, { t }] = await Promise.all([getUser(), getServerTranslations()])
+
+  if (!user) {
+    return { error: t('memberEditAccessDenied') }
+  }
+
+  if (!isUuid(memberId)) {
+    return { error: t('invalidProfile') }
+  }
+
+  const [profile, supabase] = await Promise.all([getProfile(), getSupabase()])
+
+  if (
+    !profile?.is_active ||
+    (profile.role !== 'admin' && profile.role !== 'editor')
+  ) {
+    return {
+      error: t('memberEditAccessDenied')
+    }
+  }
+
+  try {
+    const { error: rpcError } = await supabase.rpc('restore_person', {
+      target_person_id: memberId
+    })
+    if (rpcError) {
+      // Fallback to direct update if RPC is not yet applied
+      const { error: updateError } = await supabase
+        .from('persons')
+        .update({ deleted_at: null, deleted_by: null })
+        .eq('id', memberId)
+      if (updateError) throw updateError
+    }
+  } catch (err) {
+    console.error('Error restoring member:', err)
+    return { error: 'Không thể khôi phục thành viên.' }
+  }
+
+  revalidatePath('/dashboard/members')
+  return { success: true }
 }
 
 export async function updateDescendantGenerationsAction(

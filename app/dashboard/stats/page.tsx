@@ -29,6 +29,7 @@ export default async function StatsPage() {
       supabase
         .from('persons')
         .select(STATS_PERSON_COLUMNS)
+        .is('deleted_at', null)
         .order('id')
         .range(from, to)
     ),

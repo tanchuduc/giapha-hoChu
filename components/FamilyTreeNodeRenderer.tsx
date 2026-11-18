@@ -50,7 +50,7 @@ export function TreeExpandToggle({
         e.preventDefault()
         onToggle(e.currentTarget)
       }}
-      className='absolute -bottom-3 left-1/2 z-100 flex size-6 -translate-x-1/2 items-center justify-center rounded-full border border-stone-200/80 bg-white text-stone-500 transition-colors hover:border-amber-300 hover:text-amber-600'
+      className='absolute -bottom-3.5 left-1/2 z-100 flex size-7 -translate-x-1/2 items-center justify-center rounded-full border border-stone-300 bg-white text-stone-600 shadow-xs transition-all hover:border-amber-400 hover:text-amber-700 active:scale-95 active:bg-amber-50 before:absolute before:-inset-2.5 before:content-[""]'
       title={isCollapsed ? t('expand') : t('collapse')}
       aria-label={t('branchOf', { name })}
       aria-expanded={!isCollapsed}>

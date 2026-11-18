@@ -35,6 +35,7 @@ export default async function LineagePage() {
       supabase
         .from('persons')
         .select(PERSON_LIST_COLUMNS)
+        .is('deleted_at', null)
         .order('birth_year', { ascending: true, nullsFirst: false })
         .order('id')
         .range(from, to)

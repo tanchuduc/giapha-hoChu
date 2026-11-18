@@ -51,6 +51,10 @@ export interface Person {
   other_names: string | null
   /** Where the member is buried; missing on databases not upgraded yet. */
   burial_place?: string | null
+  /** Soft delete timestamp; null when the member is active. */
+  deleted_at?: string | null
+  /** User who soft-deleted the member. */
+  deleted_by?: string | null
 }
 
 export interface Relationship {

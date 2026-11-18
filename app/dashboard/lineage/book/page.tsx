@@ -46,6 +46,7 @@ export default async function LineageBookPage() {
       supabase
         .from('persons')
         .select(BOOK_PERSON_COLUMNS)
+        .is('deleted_at', null)
         .order('birth_year', { ascending: true, nullsFirst: false })
         .order('id')
         .range(from, to)

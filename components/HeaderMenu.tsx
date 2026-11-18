@@ -5,9 +5,12 @@ import {
   ArrowUpCircle,
   BarChart2,
   BookOpen,
+  CalendarDays,
   ChevronDown,
   Database,
   GitMerge,
+  Home,
+  Image as ImageIcon,
   Info,
   Network,
   UserCircle,
@@ -38,7 +41,7 @@ export default function HeaderMenu() {
   const links = [
     {
       href: '/dashboard',
-      icon: Network,
+      icon: Home,
       label: t('dashboard'),
       hover: 'hover:bg-amber-50 hover:text-amber-700'
     },
@@ -53,6 +56,18 @@ export default function HeaderMenu() {
       icon: GitMerge,
       label: t('kinship'),
       hover: 'hover:bg-blue-50 hover:text-blue-700'
+    },
+    {
+      href: '/dashboard/events',
+      icon: CalendarDays,
+      label: t('eventsTitle'),
+      hover: 'hover:bg-emerald-50 hover:text-emerald-700'
+    },
+    {
+      href: '/dashboard/gallery',
+      icon: ImageIcon,
+      label: t('galleryTitle'),
+      hover: 'hover:bg-teal-50 hover:text-teal-700'
     },
     {
       href: '/dashboard/lineage/book',
