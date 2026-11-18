@@ -31,7 +31,7 @@ export default function BottomTabBar() {
     },
     {
       href: '/dashboard/events',
-      label: t('eventsTitle'),
+      label: 'Từ đường',
       icon: CalendarDays,
       exact: false
     },

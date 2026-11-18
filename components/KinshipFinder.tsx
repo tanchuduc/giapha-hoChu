@@ -110,7 +110,17 @@ export default function KinshipFinder({ persons, relationships }: Props) {
   return (
     <div className='space-y-6'>
       {/* ── Selector row ── */}
-      <div className='rounded-2xl border border-stone-200/60 bg-white/80 p-4 sm:p-6'>
+      <div className='rounded-2xl border border-[#EBDED2] bg-white p-5 sm:p-6 shadow-xs'>
+        <div className='mb-4 flex items-center justify-between border-b border-[#F5EFEB] pb-3'>
+          <div>
+            <h2 className='font-serif text-lg font-semibold text-[#4A2818]'>
+              Tra cứu quan hệ & xưng hô họ hàng
+            </h2>
+            <p className='text-xs text-[#786C65] mt-0.5'>
+              Chọn hai người trong dòng họ để tra cứu vai vế và cách gọi nhau chuẩn mực theo lễ nghĩa
+            </p>
+          </div>
+        </div>
         <div className='flex flex-col items-center gap-3 sm:flex-row sm:items-end sm:gap-4'>
           <KinshipPersonSelector
             label={t('memberA')}
@@ -124,7 +134,7 @@ export default function KinshipFinder({ persons, relationships }: Props) {
             onClick={swap}
             aria-label={t('swapMembers')}
             title={t('swapMembers')}
-            className='flex size-10 shrink-0 items-center justify-center rounded-xl border border-stone-200 bg-stone-100 text-stone-500 transition-colors hover:bg-amber-100 hover:text-amber-600 sm:mb-0.5'>
+            className='flex size-10 shrink-0 items-center justify-center rounded-xl border border-[#EBDED2] bg-[#FAF7F2] text-[#786C65] transition-colors hover:bg-amber-100 hover:text-[#C2671A] sm:mb-0.5'>
             <ArrowLeftRight
               className='size-4 rotate-90 sm:rotate-0'
               aria-hidden='true'
@@ -144,9 +154,12 @@ export default function KinshipFinder({ persons, relationships }: Props) {
       {personA && personB ? (
         <KinshipResult personA={personA} personB={personB} result={result} />
       ) : (
-        <div className='py-16 text-center text-stone-400'>
-          <Users className='mx-auto mb-3 size-12 opacity-30' />
-          <p className='font-medium'>{t('chooseTwoMembers')}</p>
+        <div className='rounded-2xl border border-dashed border-[#EBDED2] bg-[#FAF7F2]/40 py-16 text-center text-[#786C65]'>
+          <Users className='mx-auto mb-3 size-12 opacity-35 text-[#C2671A]' />
+          <p className='font-serif text-base font-semibold text-[#4A2818]'>{t('chooseTwoMembers')}</p>
+          <p className='text-xs text-stone-400 mt-1 max-w-sm mx-auto'>
+            Hệ thống sẽ tự động phân tích đường nối huyết thống qua cụ tổ chung và hiển thị xưng hô 2 chiều
+          </p>
         </div>
       )}
 

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, Playfair_Display } from 'next/font/google'
+import { Be_Vietnam_Pro, Inter, Playfair_Display } from 'next/font/google'
 
 import MotionProvider from '@/components/MotionProvider'
 import { I18nProvider } from '@/lib/i18n/I18nProvider'
@@ -10,6 +10,11 @@ import { rootMetadata } from '@/lib/metadata'
 
 import './globals.css'
 
+const beVietnam = Be_Vietnam_Pro({
+  subsets: ['latin', 'vietnamese'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-be-vietnam-pro'
+})
 const inter = Inter({
   subsets: ['latin', 'vietnamese'],
   variable: '--font-inter'
@@ -42,7 +47,7 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body
-        className={`${inter.variable} ${playfair.variable} relative font-sans antialiased`}>
+        className={`${beVietnam.variable} ${inter.variable} ${playfair.variable} relative font-sans antialiased`}>
         <MotionProvider>
           <I18nProvider initialLocale={locale} messages={getMessages(locale)}>
             {children}

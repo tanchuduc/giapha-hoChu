@@ -46,7 +46,7 @@ export default function TopNav() {
     },
     {
       href: '/dashboard/events',
-      label: t('eventsTitle'),
+      label: 'Từ đường & Lịch giỗ',
       icon: CalendarDays,
       exact: false
     },

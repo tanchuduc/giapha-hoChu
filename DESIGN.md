@@ -3,12 +3,13 @@ version: alpha
 name: GiaPha-OS
 description: A modern, elegant, and secure open-source family tree platform designed for Vietnamese families to preserve their lineage and heritage.
 colors:
-  primary: '#1c1917'
-  secondary: '#57534e'
-  tertiary: '#d97706'
-  neutral: '#fafaf9'
+  primary: '#4a2818'
+  secondary: '#786c65'
+  tertiary: '#c2671a'
+  neutral: '#faf7f2'
   surface: '#ffffff'
-  border: '#e7e5e4'
+  border: '#ebded2'
+  accentGreen: '#2d5a43'
   error: '#dc2626'
 typography:
   headline-display:
@@ -27,27 +28,27 @@ typography:
     fontWeight: 600
     lineHeight: 1.3
   body-lg:
-    fontFamily: Inter
-    fontSize: 14px
+    fontFamily: Be Vietnam Pro
+    fontSize: 15px
     fontWeight: 400
     lineHeight: 1.5
   body-md:
-    fontFamily: Inter
+    fontFamily: Be Vietnam Pro
     fontSize: 14px
     fontWeight: 400
     lineHeight: 1.5
   body-sm:
-    fontFamily: Inter
-    fontSize: 14px
+    fontFamily: Be Vietnam Pro
+    fontSize: 13px
     fontWeight: 400
     lineHeight: 1.4
   label-lg:
-    fontFamily: Inter
+    fontFamily: Be Vietnam Pro
     fontSize: 14px
     fontWeight: 600
     lineHeight: 1.4
   label-md:
-    fontFamily: Inter
+    fontFamily: Be Vietnam Pro
     fontSize: 14px
     fontWeight: 500
     lineHeight: 1.4
@@ -109,11 +110,11 @@ components:
 
 GiaPha-OS is a modern and secure open-source family tree platform for Vietnamese families to preserve, trace, and pass down lineage, history, and cultural traditions. The interface balances professional clarity with visual indicators of respect and tradition.
 
-The visual language uses warm limestone backgrounds, crisp typography, restrained amber accents, and clear grouping. Every screen should feel calm, legible, and easy to scan.
+The visual language uses warm natural linen canvas backgrounds, crisp Vietnamese typography, deep timber wood tones, restrained warm amber accents, and clear grouping. Every screen should feel calm, respectful, modern, and welcoming.
 
 ## Core UI rules
 
-- Use `14px` for all content text: body copy, buttons, data, labels, form controls, metadata, and other interactive text. Reserve `16px` and larger sizes for headings and subheadings only.
+- Use `14px`-`15px` for content text: body copy, buttons, data, labels, form controls, and metadata. Prominent callouts such as Kinship title badges or memorial banners may use `20px`-`32px` semibold for clear readability across generations.
 - Use sentence case for headings. Do not capitalize or uppercase headings. Product names keep their official title case.
 - Do not alter font tracking. Do not use tracking utility classes or custom letter spacing.
 - Do not use bold weight utilities. Use `font-semibold` for headings and `font-medium` for bold inline text.
@@ -124,16 +125,17 @@ The visual language uses warm limestone backgrounds, crisp typography, restraine
 
 ## Colors
 
-- **Primary (#1C1917):** Deep charcoal for headlines, branding, and important actions.
-- **Secondary (#57534E):** Granite grey for metadata, inactive states, icons, and supporting structure.
-- **Tertiary (#D97706):** Golden amber for focus outlines, badges, and key interactive highlights.
-- **Neutral (#FAFAF9):** Warm limestone for the main canvas.
-- **Surface (#FFFFFF):** White for content layers and navigation surfaces.
-- **Border (#E7E5E4):** Subtle stone border for component definition when no shadow is used.
+- **Primary (#4A2818):** Deep timber wood (Gỗ gụ trầm) for headlines, branding, and grounded actions.
+- **Secondary (#786C65):** Warm stone wood for metadata, inactive states, icons, and supporting structure.
+- **Tertiary (#C2671A):** Warm honey amber for focus outlines, badges, and key interactive highlights.
+- **Neutral (#FAF7F2):** Warm linen canvas for the main canvas, soothing and glare-free.
+- **Surface (#FFFFFF):** Clean white for content layers and card surfaces.
+- **Border (#EBDED2):** Soft warm border for component definition with natural harmony.
+- **Accent Green (#2D5A43):** Heritage sage for vitality, living members, and peaceful growth.
 
 ## Typography
 
-Playfair Display is used for branding and headings. Inter is used for body copy, controls, dense data, and family tree structures. Body and control text is always 14px. Headings start at 16px and use semibold weight. Do not use visual transforms to force text into uppercase or title case; write the copy in sentence case instead.
+Playfair Display is used for heritage branding and grand headings. Be Vietnam Pro is used for body copy, controls, dense data, and family tree structures. Headings start at 16px and use semibold weight. Do not use visual transforms to force text into uppercase or title case; write the copy in sentence case instead.
 
 ## Layout and spacing
 

@@ -47,11 +47,16 @@ export default function KinshipResult({
           transition={{ duration: 0.35 }}
           className='space-y-4'>
           {/* Description badge */}
-          <div className='flex items-center gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4'>
-            <Sparkles className='size-5 shrink-0 text-amber-500' />
-            <p className='font-medium text-amber-800'>
-              {describeKinship(result.description, t)}
-            </p>
+          <div className='flex items-center gap-3 rounded-2xl border border-[#EBDED2] bg-[#FAF7F2] px-5 py-4 shadow-xs'>
+            <div className='flex size-9 shrink-0 items-center justify-center rounded-xl bg-amber-100 text-[#C2671A]'>
+              <Sparkles className='size-5' />
+            </div>
+            <div>
+              <p className='text-xs font-medium text-[#786C65] uppercase tracking-wider'>Mối quan hệ thân tộc</p>
+              <p className='text-sm font-semibold text-[#4A2818]'>
+                {describeKinship(result.description, t)}
+              </p>
+            </div>
           </div>
 
           {/* Main kinship cards */}
@@ -60,17 +65,24 @@ export default function KinshipResult({
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 }}
-              className='rounded-2xl border border-stone-200/60 bg-white/90 p-5'>
-              <p className='mb-3 text-sm font-medium text-stone-400'>
-                {t('callsAs', {
-                  name: personA.full_name,
-                  other: personB.full_name
-                })}
-              </p>
-              <p className='font-serif text-sm font-medium text-amber-600'>
-                {unknown
-                  ? t('kinshipUnknownTerm')
-                  : result.aCallsB || t('kinshipNoTerm')}
+              className='rounded-2xl border border-[#EBDED2] bg-white p-5 shadow-xs'>
+              <div className='flex items-center justify-between gap-2 border-b border-[#F5EFEB] pb-3 mb-3'>
+                <p className='text-xs font-semibold uppercase tracking-wider text-stone-500'>
+                  {personA.full_name} gọi {personB.full_name} là:
+                </p>
+                <span className='inline-flex items-center rounded-full bg-[#FAF7F2] px-2.5 py-0.5 text-xs font-medium text-[#786C65] border border-[#EBDED2]'>
+                  Đời thứ {personB.generation ?? '?'}
+                </span>
+              </div>
+              <div className='py-2'>
+                <p className='font-serif text-2xl sm:text-3xl font-bold text-[#4A2818] tracking-tight'>
+                  {unknown
+                    ? t('kinshipUnknownTerm')
+                    : result.aCallsB || t('kinshipNoTerm')}
+                </p>
+              </div>
+              <p className='text-xs text-stone-400 mt-1'>
+                Cách xưng hô chuẩn mực theo quan hệ gia tộc
               </p>
             </m.div>
 
@@ -78,17 +90,24 @@ export default function KinshipResult({
               initial={{ opacity: 0, x: 10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.15 }}
-              className='rounded-2xl border border-stone-200/60 bg-white/90 p-5'>
-              <p className='mb-3 text-sm font-medium text-stone-400'>
-                {t('callsAs', {
-                  name: personB.full_name,
-                  other: personA.full_name
-                })}
-              </p>
-              <p className='font-serif text-sm font-medium text-amber-600'>
-                {unknown
-                  ? t('kinshipUnknownTerm')
-                  : result.bCallsA || t('kinshipNoTerm')}
+              className='rounded-2xl border border-[#EBDED2] bg-white p-5 shadow-xs'>
+              <div className='flex items-center justify-between gap-2 border-b border-[#F5EFEB] pb-3 mb-3'>
+                <p className='text-xs font-semibold uppercase tracking-wider text-stone-500'>
+                  {personB.full_name} gọi {personA.full_name} là:
+                </p>
+                <span className='inline-flex items-center rounded-full bg-[#FAF7F2] px-2.5 py-0.5 text-xs font-medium text-[#786C65] border border-[#EBDED2]'>
+                  Đời thứ {personA.generation ?? '?'}
+                </span>
+              </div>
+              <div className='py-2'>
+                <p className='font-serif text-2xl sm:text-3xl font-bold text-[#C2671A] tracking-tight'>
+                  {unknown
+                    ? t('kinshipUnknownTerm')
+                    : result.bCallsA || t('kinshipNoTerm')}
+                </p>
+              </div>
+              <p className='text-xs text-stone-400 mt-1'>
+                Cách xưng hô đáp lễ chuẩn mực
               </p>
             </m.div>
           </div>
@@ -99,10 +118,10 @@ export default function KinshipResult({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.25 }}
-              className='rounded-2xl border border-stone-200/60 bg-stone-50 px-6 py-5'>
+              className='rounded-2xl border border-[#EBDED2] bg-[#FAF7F2]/60 px-6 py-5'>
               <div className='mb-4 flex items-center gap-2'>
-                <GitMerge className='size-4 text-stone-400' />
-                <p className='text-sm font-medium text-stone-400'>
+                <GitMerge className='size-4 text-[#786C65]' />
+                <p className='text-xs font-semibold uppercase tracking-wider text-[#786C65]'>
                   {t('relationPathAnalysis')}
                 </p>
               </div>
@@ -111,12 +130,12 @@ export default function KinshipResult({
                   <div
                     key={describePathStep(step, t)}
                     className='flex items-start gap-4'>
-                    <div className='mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full border border-stone-200 bg-white'>
-                      <span className='text-sm font-medium text-stone-400'>
+                    <div className='mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full border border-[#EBDED2] bg-white text-[#4A2818] shadow-xs'>
+                      <span className='text-xs font-semibold'>
                         {i + 1}
                       </span>
                     </div>
-                    <p className='pt-1 text-sm leading-relaxed text-stone-600'>
+                    <p className='pt-0.5 text-sm leading-relaxed text-[#4A2818]'>
                       {describePathStep(step, t)}
                     </p>
                   </div>

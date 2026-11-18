@@ -10,15 +10,16 @@
   --color-foreground: var(--foreground);
 
   /* Typography */
-  --font-sans: var(--font-inter);
+  --font-sans: var(--font-be-vietnam-pro), var(--font-inter);
   --font-serif: var(--font-playfair);
 
-  --color-primary: #1c1917;
-  --color-secondary: #57534e;
-  --color-tertiary: #d97706;
-  --color-neutral: #fafaf9;
+  --color-primary: #4a2818;
+  --color-secondary: #786c65;
+  --color-tertiary: #c2671a;
+  --color-neutral: #faf7f2;
   --color-surface: #ffffff;
-  --color-border: #e7e5e4;
+  --color-border: #ebded2;
+  --color-accent-green: #2d5a43;
   --color-error: #dc2626;
 
   --radius-sm: 4px;

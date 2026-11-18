@@ -1,21 +1,18 @@
 import { Suspense } from 'react'
 
-import EventsList from '@/components/EventsList'
+import AncestralTabs from '@/components/ancestral/AncestralTabs'
 import MemberDetailModal from '@/components/modal/MemberDetailModal'
 import { MemberListProvider } from '@/context/MemberListContext'
-import { getServerTranslations } from '@/lib/i18n/server'
 import { EVENT_PERSON_COLUMNS, EVENT_PERSON_FILTER } from '@/utils/eventPersons'
 import { fetchAllRowsOrThrow } from '@/utils/supabase/fetchAll'
 import { getIsAdmin, getSupabase, getUser } from '@/utils/supabase/queries'
 
 export async function generateMetadata() {
-  const { t } = await getServerTranslations()
-  return { title: t('eventsTitle') }
+  return { title: 'Từ Đường & Lịch Giỗ Họ Chu' }
 }
 
 export default async function EventsPage() {
-  const [{ t }, supabase, user, isAdmin] = await Promise.all([
-    getServerTranslations(),
+  const [supabase, user, isAdmin] = await Promise.all([
     getSupabase(),
     getUser(),
     getIsAdmin()
@@ -48,15 +45,15 @@ export default async function EventsPage() {
     <Suspense fallback={null}>
       <MemberListProvider>
         <div className='relative flex w-full flex-1 flex-col pb-12'>
-          <div className='relative z-20 mx-auto w-full max-w-3xl px-4 py-6 sm:px-6 lg:px-8'>
-            <h1 className='title'>{t('eventsTitle')}</h1>
-            <p className='mt-1 text-sm text-stone-500'>
-              {t('eventsDescription')}
+          <div className='relative z-20 mx-auto w-full max-w-4xl px-4 py-6 sm:px-6 lg:px-8 text-center'>
+            <h1 className='font-serif text-3xl font-bold text-[#4A2818] tracking-tight'>Từ Đường & Lịch Giỗ</h1>
+            <p className='mt-1.5 text-sm text-[#786C65] max-w-lg mx-auto'>
+              Phụng thờ Tiên Tổ họ Chu, tra cứu ngày kỵ âm lịch và ghi nhớ cội nguồn gia tộc
             </p>
           </div>
 
-          <main className='mx-auto w-full max-w-3xl flex-1 px-4 sm:px-6 lg:px-8'>
-            <EventsList
+          <main className='mx-auto w-full max-w-4xl flex-1 px-4 sm:px-6 lg:px-8'>
+            <AncestralTabs
               persons={persons ?? []}
               customEvents={customEvents ?? []}
               currentUserId={user?.id ?? null}
