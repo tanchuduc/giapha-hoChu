@@ -125,7 +125,7 @@ export default function TopNav() {
 
   const adminGroup = {
     id: 'quantri',
-    label: 'Ban Quản Trị',
+    label: 'Quản Trị',
     icon: ShieldCheck,
     activeMatch: ['/dashboard/users', '/dashboard/lineage', '/dashboard/data', '/dashboard/upgrade'],
     items: [
@@ -163,17 +163,17 @@ export default function TopNav() {
     <nav
       ref={navRef}
       aria-label='Điều hướng chính'
-      className='hidden lg:flex items-center gap-1 xl:gap-2'>
+      className='hidden lg:flex items-center gap-1 xl:gap-1.5 shrink-0'>
       {/* 1. Trang Chủ */}
       <Link
         href='/dashboard'
-        className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs xl:text-sm font-semibold transition-all ${
+        className={`flex items-center gap-1.5 rounded-xl px-2.5 xl:px-3 py-1.5 text-xs xl:text-sm font-semibold whitespace-nowrap shrink-0 transition-all ${
           isHomeActive
             ? 'bg-[#FAF7F2] text-[#4A2818] ring-1 ring-[#EBDED2] shadow-2xs'
             : 'text-[#786C65] hover:bg-[#FAF7F2] hover:text-[#4A2818]'
         }`}>
-        <Home className='size-4 text-[#C2671A]' />
-        <span>Trang Chủ</span>
+        <Home className='size-3.5 xl:size-4 text-[#C2671A] shrink-0' />
+        <span className='whitespace-nowrap'>Trang Chủ</span>
       </Link>
 
       {/* 2. Các nhóm chức năng có dropdown */}
@@ -185,20 +185,20 @@ export default function TopNav() {
         const isOpen = openDropdown === group.id
 
         return (
-          <div key={group.id} className='relative'>
+          <div key={group.id} className='relative shrink-0'>
             <button
               type='button'
               onClick={() => setOpenDropdown(isOpen ? null : group.id)}
-              className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs xl:text-sm font-semibold transition-all ${
+              className={`flex items-center gap-1.5 rounded-xl px-2.5 xl:px-3 py-1.5 text-xs xl:text-sm font-semibold whitespace-nowrap shrink-0 transition-all ${
                 isActive
                   ? 'bg-amber-100/70 text-[#4A2818] ring-1 ring-amber-300/40 shadow-2xs'
                   : 'text-[#786C65] hover:bg-[#FAF7F2] hover:text-[#4A2818]'
               }`}>
-              <Icon className='size-4 text-[#C2671A]' />
-              <span>{group.label}</span>
+              <Icon className='size-3.5 xl:size-4 text-[#C2671A] shrink-0' />
+              <span className='whitespace-nowrap'>{group.label}</span>
               <ChevronDown
-                className={`size-3.5 transition-transform duration-200 ${
-                  isOpen ? 'rotate-180 text-[#C2671A]' : 'text-stone-400'
+                className={`size-3 text-stone-400 shrink-0 transition-transform duration-200 ${
+                  isOpen ? 'rotate-180 text-[#C2671A]' : ''
                 }`}
               />
             </button>
@@ -226,7 +226,7 @@ export default function TopNav() {
                           <ItemIcon className='size-4' />
                         </div>
                         <div className='min-w-0 flex-1'>
-                          <p className='text-xs font-bold leading-tight'>{item.label}</p>
+                          <p className='text-xs font-bold leading-tight whitespace-nowrap'>{item.label}</p>
                           <p className='mt-0.5 text-[11px] text-[#786C65] leading-tight truncate'>
                             {item.description}
                           </p>
@@ -244,31 +244,31 @@ export default function TopNav() {
       {/* 3. Thống Kê */}
       <Link
         href='/dashboard/stats'
-        className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs xl:text-sm font-semibold transition-all ${
+        className={`flex items-center gap-1.5 rounded-xl px-2.5 xl:px-3 py-1.5 text-xs xl:text-sm font-semibold whitespace-nowrap shrink-0 transition-all ${
           isStatsActive
             ? 'bg-amber-100/70 text-[#4A2818] ring-1 ring-amber-300/40 shadow-2xs'
             : 'text-[#786C65] hover:bg-[#FAF7F2] hover:text-[#4A2818]'
         }`}>
-        <BarChart2 className='size-4 text-[#C2671A]' />
-        <span>Thống Kê</span>
+        <BarChart2 className='size-3.5 xl:size-4 text-[#C2671A] shrink-0' />
+        <span className='whitespace-nowrap'>Thống Kê</span>
       </Link>
 
       {/* 4. Ban Quản Trị (Chỉ hiện khi có quyền Editor/Admin) */}
       {isEditor && (
-        <div className='relative ml-1 pl-1 border-l border-[#EBDED2]'>
+        <div className='relative ml-1 pl-1 border-l border-[#EBDED2] shrink-0'>
           <button
             type='button'
             onClick={() => setOpenDropdown(openDropdown === 'quantri' ? null : 'quantri')}
-            className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs xl:text-sm font-bold transition-all ${
+            className={`flex items-center gap-1.5 rounded-xl px-2.5 xl:px-3 py-1.5 text-xs xl:text-sm font-bold whitespace-nowrap shrink-0 transition-all ${
               adminGroup.activeMatch.some((m) => pathname === m || pathname.startsWith(`${m}/`))
                 ? 'bg-[#4A2818] text-white shadow-2xs'
                 : 'bg-stone-100/80 text-[#4A2818] hover:bg-[#4A2818] hover:text-white'
             }`}>
-            <ShieldCheck className='size-4 text-amber-300' />
-            <span>Quản Trị</span>
+            <ShieldCheck className='size-3.5 xl:size-4 text-amber-300 shrink-0' />
+            <span className='whitespace-nowrap'>Quản Trị</span>
             <ChevronDown
-              className={`size-3.5 transition-transform duration-200 ${
-                openDropdown === 'quantri' ? 'rotate-180' : ''
+              className={`size-3 text-stone-400 shrink-0 transition-transform duration-200 ${
+                openDropdown === 'quantri' ? 'rotate-180 text-white' : ''
               }`}
             />
           </button>
@@ -277,11 +277,11 @@ export default function TopNav() {
           {openDropdown === 'quantri' && (
             <div className='absolute right-0 mt-2 w-80 origin-top-right rounded-2xl border border-[#EBDED2] bg-white p-2 shadow-xl z-50 animate-in fade-in zoom-in-95 duration-150'>
               <div className='border-b border-[#EBDED2] px-3 py-2 bg-[#FAF7F2] rounded-xl mb-1'>
-                <p className='text-xs font-bold text-[#4A2818] flex items-center gap-1.5'>
-                  <ShieldCheck className='size-3.5 text-[#C2671A]' />
+                <p className='text-xs font-bold text-[#4A2818] flex items-center gap-1.5 whitespace-nowrap'>
+                  <ShieldCheck className='size-3.5 text-[#C2671A] shrink-0' />
                   Khu Vực Ban Trị Sự Dòng Họ
                 </p>
-                <p className='text-[10px] text-[#786C65] mt-0.5'>Chỉ dành cho Quản trị viên & Ban biên tập</p>
+                <p className='text-[10px] text-[#786C65] mt-0.5 truncate'>Chỉ dành cho Quản trị viên & Ban biên tập</p>
               </div>
               <div className='space-y-1'>
                 {adminGroup.items.map((item) => {
@@ -303,7 +303,7 @@ export default function TopNav() {
                         <ItemIcon className='size-4' />
                       </div>
                       <div className='min-w-0 flex-1'>
-                        <p className='text-xs font-bold leading-tight'>{item.label}</p>
+                        <p className='text-xs font-bold leading-tight whitespace-nowrap'>{item.label}</p>
                         <p className='mt-0.5 text-[11px] text-[#786C65] leading-tight truncate'>
                           {item.description}
                         </p>

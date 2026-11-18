@@ -4,9 +4,7 @@ import Link from 'next/link'
 import config from '@/app/config'
 import GlobalMemberSearch from '@/components/GlobalMemberSearch'
 import HeaderMenu from '@/components/HeaderMenu'
-import LanguageSwitcher from '@/components/LanguageSwitcher'
 import TopNav from '@/components/navigation/TopNav'
-import TextSizeToggle from '@/components/TextSizeToggle'
 
 export default function DashboardHeader() {
   return (
@@ -32,14 +30,13 @@ export default function DashboardHeader() {
         </div>
 
         {/* Desktop Main Navigation */}
-        <div className='hidden lg:flex flex-1 justify-center px-2'>
+        <div className='hidden lg:flex flex-1 justify-center px-4'>
           <TopNav />
         </div>
 
-        <div className='flex items-center gap-2 sm:gap-3 shrink-0'>
+        {/* User Search & Profile Menu */}
+        <div className='flex items-center gap-2.5 sm:gap-3 shrink-0'>
           <GlobalMemberSearch />
-          <TextSizeToggle />
-          <LanguageSwitcher />
           <HeaderMenu />
         </div>
       </div>
