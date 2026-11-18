@@ -1,5 +1,5 @@
 export function getAvatarBg(gender: string) {
-  if (gender === 'male') return 'bg-linear-to-br from-sky-400 to-sky-500'
-  if (gender === 'female') return 'bg-linear-to-br from-rose-400 to-rose-500'
-  return 'bg-linear-to-br from-stone-400 to-stone-500'
+  if (gender === 'male') return 'bg-[#2D4A3E] text-emerald-100' // Xanh rêu trầm
+  if (gender === 'female') return 'bg-[#9A5B2D] text-amber-100' // Hổ phách mật ong
+  return 'bg-[#4A2818] text-amber-100' // Nâu đất gỗ gụ
 }
