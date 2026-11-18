@@ -55,6 +55,19 @@ export interface Person {
   deleted_at?: string | null
   /** User who soft-deleted the member. */
   deleted_by?: string | null
+  /** Branch id of member */
+  branch_id?: string | null
+}
+
+export interface Branch {
+  id: string
+  name: string
+  parent_branch_id: string | null
+  head_person_id: string | null
+  description: string | null
+  order_index: number
+  created_at: string
+  updated_at: string
 }
 
 export interface Relationship {
@@ -89,3 +102,47 @@ export interface GalleryItem {
   // Ids of the members tagged in the photo (filled by attachGalleryTags).
   person_ids?: string[]
 }
+
+export type ChangeRequestStatus = 'pending' | 'approved' | 'rejected'
+
+export interface ChangeRequest {
+  id: string
+  target_person_id: string
+  proposed_by_user_id: string
+  proposed_data: Record<string, unknown>
+  original_data?: Record<string, unknown> | null
+  reason?: string | null
+  proof_url?: string | null
+  status: ChangeRequestStatus
+  reviewed_by_user_id?: string | null
+  review_note?: string | null
+  reviewed_at?: string | null
+  created_at: string
+  updated_at: string
+  // Optional display fields populated by queries/joins
+  target_person_name?: string | null
+  proposer_email?: string | null
+  target_person?: Person | null
+}
+
+export type AuditLogAction =
+  | 'INSERT'
+  | 'UPDATE'
+  | 'DELETE'
+  | 'RESTORE'
+  | 'MERGE'
+  | 'APPROVE_PROPOSAL'
+
+export interface AuditLog {
+  id: string
+  table_name: string
+  record_id: string
+  action: AuditLogAction | string
+  performed_by: string | null
+  old_values: Record<string, unknown> | null
+  new_values: Record<string, unknown> | null
+  created_at: string
+  // Optional display fields
+  performer_email?: string | null
+}
+

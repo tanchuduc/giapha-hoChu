@@ -1,7 +1,7 @@
 'use client'
 
 import { AnimatePresence, m } from 'framer-motion'
-import { ArrowLeft, Edit2, ExternalLink, X } from 'lucide-react'
+import { ArrowLeft, Edit2, ExternalLink, FileText, X } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import {
@@ -19,6 +19,7 @@ import {
   ErrorPanel,
   LoadingPanel
 } from '@/components/modal/MemberDetailModalPanels'
+import ProposeEditModal from '@/components/modal/ProposeEditModal'
 import { useUser } from '@/components/UserProvider'
 import ViewOnTreeLink from '@/components/ViewOnTreeLink'
 import { useMemberListView } from '@/context/useMemberListView'
@@ -35,6 +36,7 @@ export function ModalHeaderActions({
   person,
   onBack,
   onStartEdit,
+  onStartPropose,
   onClose
 }: {
   isEditing: boolean
@@ -42,6 +44,7 @@ export function ModalHeaderActions({
   person: Person | null
   onBack: () => void
   onStartEdit: () => void
+  onStartPropose?: () => void
   onClose: () => void
 }) {
   const { t } = useI18n()
@@ -64,6 +67,16 @@ export function ModalHeaderActions({
               className='btn-amber text-sm'
               compact
             />
+            {onStartPropose && (
+              <button
+                type='button'
+                onClick={onStartPropose}
+                className='inline-flex items-center gap-1.5 rounded-full border border-amber-300/80 bg-amber-50/90 px-3 py-2 text-xs font-semibold text-amber-900 shadow-xs transition hover:bg-amber-100'
+                title='Đề xuất sửa hoặc bổ sung thông tin'>
+                <FileText className='size-3.5' />
+                <span className='hidden sm:inline'>Đề xuất sửa</span>
+              </button>
+            )}
             {canEdit && (
               <>
                 <Link
@@ -171,6 +184,7 @@ export default function MemberDetailModal() {
   const { isAdmin, isEditor: canEdit, supabase } = useUser()
   const router = useRouter()
   const [isEditing, setIsEditing] = useState(false)
+  const [isProposing, setIsProposing] = useState(false)
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -196,6 +210,7 @@ export default function MemberDetailModal() {
     setMemberModalId(null)
     setShowCreateMember(false)
     setIsEditing(false)
+    setIsProposing(false)
   }, [setMemberModalId, setShowCreateMember])
 
   // Escape closes the detail view, not a form being edited (see the helper)
@@ -349,6 +364,7 @@ export default function MemberDetailModal() {
               person={shownPerson}
               onBack={() => setIsEditing(false)}
               onStartEdit={() => setIsEditing(true)}
+              onStartPropose={() => setIsProposing(true)}
               onClose={closeModal}
             />
 
@@ -370,6 +386,14 @@ export default function MemberDetailModal() {
             />
           </m.div>
         </m.dialog>
+      )}
+
+      {shownPerson && isProposing && (
+        <ProposeEditModal
+          person={shownPerson}
+          isOpen={isProposing}
+          onClose={() => setIsProposing(false)}
+        />
       )}
     </AnimatePresence>
   )

@@ -5,6 +5,7 @@ import { Users } from 'lucide-react'
 import { useCallback, useState } from 'react'
 
 import RelationshipManager from '@/components/RelationshipManager'
+import BurialLocationMap from '@/components/BurialLocationMap'
 import MemberDetailCover from '@/context/memberDetail/MemberDetailCover'
 import {
   containerVariants,
@@ -96,6 +97,12 @@ export default function MemberDetailContent({
 
           {/* Sidebar / Private Info */}
           <div className='space-y-6'>
+            {person.burial_place && (
+              <BurialLocationMap
+                burialPlace={person.burial_place}
+                personName={person.full_name}
+              />
+            )}
             <MemberPrivateInfo isAdmin={isAdmin} fullPerson={fullPerson} />
           </div>
         </div>

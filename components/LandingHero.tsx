@@ -68,22 +68,31 @@ export default function LandingHero({ siteName }: LandingHeroProps) {
           <span className='block'>{siteName}</span>
         </h1>
 
+        <p className='font-serif text-base italic text-amber-800/90 sm:text-lg'>
+          &ldquo;Mộc xuất thiên chi do hữu bản — Thủy lưu vạn phái tổng đồng nguyên&rdquo;
+        </p>
+
         <p className='mx-auto max-w-2xl text-sm leading-relaxed font-light text-stone-600'>
           {t('landingDescription')}
         </p>
       </m.div>
 
       <m.div
-        className='relative flex w-full flex-col items-center justify-center gap-4 px-4 pt-6 sm:flex-row sm:px-0'
+        className='relative flex w-full flex-col items-center justify-center gap-4 px-4 pt-4 sm:flex-row sm:px-0'
         variants={fadeIn}>
         <div className='absolute top-1/2 left-1/2 z-0 hidden h-16 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-500/30 blur-2xl sm:block'></div>
         <Link
           href='/login'
-          className='group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl border border-stone-800 bg-primary px-8 py-4 text-sm font-medium text-white transition duration-300 hover:-translate-y-1 hover:border-stone-700 hover:bg-stone-800 active:translate-y-0 sm:w-auto sm:px-10 sm:py-5'>
+          className='group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl border border-stone-800 bg-primary px-8 py-4 text-sm font-medium text-white transition duration-300 hover:-translate-y-1 hover:border-stone-700 hover:bg-stone-800 active:translate-y-0 sm:w-auto sm:px-10 sm:py-4'>
           <span className='relative z-10 flex items-center gap-3'>
             {t('landingCta')}
             <ArrowRight className='size-5 transition-transform group-hover:translate-x-1.5' />
           </span>
+        </Link>
+        <Link
+          href='/about'
+          className='inline-flex w-full items-center justify-center gap-2 rounded-xl border border-stone-300 bg-white/80 backdrop-blur-xs px-6 py-4 text-sm font-medium text-stone-800 transition duration-300 hover:-translate-y-1 hover:bg-stone-100 sm:w-auto'>
+          <span>Lịch sử & Cội nguồn Tộc Chu</span>
         </Link>
       </m.div>
 

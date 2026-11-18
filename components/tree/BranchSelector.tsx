@@ -1,6 +1,6 @@
 'use client'
 
-import { GitBranch, Layers } from 'lucide-react'
+import { GitBranch } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useTransition } from 'react'
 

@@ -4,6 +4,7 @@ import {
   BarChart2,
   BookOpen,
   CalendarDays,
+  GitBranch,
   GitMerge,
   Home,
   Image as ImageIcon,
@@ -29,6 +30,12 @@ export default function TopNav() {
       href: '/dashboard/members',
       label: t('familyTree'),
       icon: Network,
+      exact: false
+    },
+    {
+      href: '/dashboard/branches',
+      label: 'Chi phái',
+      icon: GitBranch,
       exact: false
     },
     {

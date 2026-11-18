@@ -8,6 +8,9 @@ import {
   CalendarDays,
   ChevronDown,
   Database,
+  FileCheck,
+  FileSpreadsheet,
+  GitBranch,
   GitMerge,
   Home,
   Image as ImageIcon,
@@ -52,6 +55,12 @@ export default function HeaderMenu() {
       hover: 'hover:bg-amber-50 hover:text-amber-700'
     },
     {
+      href: '/dashboard/branches',
+      icon: GitBranch,
+      label: 'Chi phái họ Chu',
+      hover: 'hover:bg-amber-50 hover:text-amber-700'
+    },
+    {
       href: '/dashboard/kinship',
       icon: GitMerge,
       label: t('kinship'),
@@ -84,6 +93,18 @@ export default function HeaderMenu() {
   ]
 
   const adminLinks = [
+    {
+      href: '/dashboard/digitization',
+      icon: FileSpreadsheet,
+      label: 'Số hóa gia phả giấy',
+      hover: 'hover:bg-amber-50 hover:text-amber-800'
+    },
+    {
+      href: '/dashboard/proposals',
+      icon: FileCheck,
+      label: 'Duyệt đề xuất phả hệ',
+      hover: 'hover:bg-amber-50 hover:text-amber-800'
+    },
     {
       href: '/dashboard/users',
       icon: Users,

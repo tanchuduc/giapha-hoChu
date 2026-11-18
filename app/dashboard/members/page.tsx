@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 
-import MembersViews from '@/components/MembersViews'
+import { getBranches } from '@/app/actions/branch'
 import MemberDetailModal from '@/components/modal/MemberDetailModal'
+import MembersViews from '@/components/MembersViews'
+import BranchSelector from '@/components/tree/BranchSelector'
 import ViewToggle from '@/components/ViewToggle'
 import { AvatarUrlProvider } from '@/context/AvatarUrlContext'
 import { MemberListProvider } from '@/context/MemberListContext'
@@ -20,7 +22,12 @@ import { pickDefaultRootId } from '@/utils/treeRoot'
 import { parseViewMode } from '@/utils/viewMode'
 
 interface PageProps {
-  searchParams: Promise<{ view?: string; rootId?: string; avatar?: string }>
+  searchParams: Promise<{
+    view?: string
+    rootId?: string
+    avatar?: string
+    branchId?: string
+  }>
 }
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getServerTranslations()
@@ -29,7 +36,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function FamilyTreePage({ searchParams }: PageProps) {
-  const { view, rootId, avatar } = await searchParams
+  const { view, rootId, avatar, branchId } = await searchParams
   const initialView = view === undefined ? undefined : parseViewMode(view)
   const initialShowAvatar = avatar !== 'hide'
 
@@ -38,13 +45,9 @@ export default async function FamilyTreePage({ searchParams }: PageProps) {
     profile?.is_active === true &&
     (profile.role === 'admin' || profile.role === 'editor')
 
-  // If view is list, we only need persons, not relationships.
-  // We fetch persons for all views to pass down as a prop if we want, or let components fetch.
-  // Actually, to make transitions fast and avoid duplicate fetching across components,
-  // we will fetch data here and pass it down as props.
   const supabase = await getSupabase()
 
-  const [personsRes, relsRes] = await Promise.all([
+  const [personsRes, relsRes, branchesRes] = await Promise.all([
     fetchAllRowsOrThrow((from, to) =>
       supabase
         .from('persons')
@@ -61,18 +64,18 @@ export default async function FamilyTreePage({ searchParams }: PageProps) {
         .order('created_at')
         .order('id')
         .range(from, to)
-    )
+    ),
+    getBranches()
   ])
 
   // PERSON_LIST_COLUMNS leaves out note/created_at; no view reads them.
   const persons = (personsRes.data || []) as Person[]
   // RELATIONSHIP_COLUMNS leaves out note/updated_at; no view reads them.
   const relationships = (relsRes.data || []) as Relationship[]
+  const branches = branchesRes.data || []
 
   // One storage request signs every avatar of the tree/list/mindmap instead
-  // of one /api/avatar round trip per member. Storage RLS only lets active
-  // users sign, the same rule the /api/avatar route applies; the same URLs
-  // come back on the next load, so the browser serves the photos from cache.
+  // of one /api/avatar round trip per member.
   const signedAvatarUrls = profile?.is_active
     ? await signAvatarUrls(supabase, persons)
     : NO_SIGNED_AVATAR_URLS
@@ -82,6 +85,17 @@ export default async function FamilyTreePage({ searchParams }: PageProps) {
   persons.forEach((p) => personsMap.set(p.id, p))
 
   let finalRootId = rootId
+
+  // If a branch is selected with a designated head ancestor, focus on it
+  if (branchId) {
+    const selectedBranch = branches.find((b) => b.id === branchId)
+    if (
+      selectedBranch?.head_person_id &&
+      personsMap.has(selectedBranch.head_person_id)
+    ) {
+      finalRootId = selectedBranch.head_person_id
+    }
+  }
 
   // If no rootId is provided, open on the earliest ancestor
   if (!finalRootId || !personsMap.has(finalRootId)) {
@@ -95,7 +109,15 @@ export default async function FamilyTreePage({ searchParams }: PageProps) {
           initialView={initialView}
           initialRootId={finalRootId}
           initialShowAvatar={initialShowAvatar}>
-          <ViewToggle />
+          <div className='flex flex-wrap items-center justify-center gap-2 sm:gap-4 px-4 mt-4 mb-2'>
+            <ViewToggle />
+            {branches.length > 0 && (
+              <BranchSelector
+                branches={branches}
+                selectedBranchId={branchId ?? null}
+              />
+            )}
+          </div>
           <MembersViews
             persons={persons}
             relationships={relationships}
