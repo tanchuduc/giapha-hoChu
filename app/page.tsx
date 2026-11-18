@@ -5,6 +5,7 @@ import LanguageSwitcher from '@/components/LanguageSwitcher'
 import { getServerTranslations } from '@/lib/i18n/server'
 import { websiteJsonLd } from '@/lib/jsonLd'
 import { publicPageMetadata } from '@/lib/metadata'
+import { getUser } from '@/utils/supabase/queries'
 
 import config from './config'
 
@@ -18,7 +19,11 @@ export async function generateMetadata() {
 }
 
 export default async function HomePage() {
-  const { t, locale } = await getServerTranslations()
+  const [{ t, locale }, user] = await Promise.all([
+    getServerTranslations(),
+    getUser().catch(() => null)
+  ])
+
   return (
     <div className='relative flex min-h-screen flex-col overflow-hidden bg-neutral selection:bg-amber-200 selection:text-amber-900'>
       <JsonLd
@@ -37,8 +42,8 @@ export default async function HomePage() {
         <LanguageSwitcher />
       </div>
 
-      <main className='relative z-10 flex w-full flex-1 flex-col items-center justify-center px-4 py-20 md:py-32'>
-        <LandingHero siteName={config.siteName} />
+      <main className='relative z-10 flex w-full flex-1 flex-col items-center justify-center px-4 py-12 md:py-20'>
+        <LandingHero siteName={config.siteName} isLoggedIn={Boolean(user)} />
       </main>
 
       <Footer className='relative z-10 border-none bg-transparent' />

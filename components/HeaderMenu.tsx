@@ -2,20 +2,12 @@
 
 import { AnimatePresence, m } from 'framer-motion'
 import {
-  ArrowUpCircle,
-  BarChart2,
-  BookOpen,
-  CalendarDays,
   ChevronDown,
   Database,
   FileCheck,
-  FileSpreadsheet,
-  GitBranch,
-  GitMerge,
-  Home,
-  Image as ImageIcon,
   Info,
-  Network,
+  Shield,
+  UserCheck,
   UserCircle,
   Users
 } from 'lucide-react'
@@ -28,7 +20,7 @@ import LogoutButton from './LogoutButton'
 import { useUser } from './UserProvider'
 
 export default function HeaderMenu() {
-  const { user, isAdmin } = useUser()
+  const { user, isAdmin, isEditor } = useUser()
   const { t } = useI18n()
   const userEmail = user?.email
   const {
@@ -41,95 +33,11 @@ export default function HeaderMenu() {
     buttonProps
   } = usePopupMenu()
 
-  const links = [
-    {
-      href: '/dashboard',
-      icon: Home,
-      label: t('dashboard'),
-      hover: 'hover:bg-amber-50 hover:text-amber-700'
-    },
-    {
-      href: '/dashboard/members',
-      icon: Network,
-      label: t('familyTree'),
-      hover: 'hover:bg-amber-50 hover:text-amber-700'
-    },
-    {
-      href: '/dashboard/branches',
-      icon: GitBranch,
-      label: 'Chi phái họ Chu',
-      hover: 'hover:bg-amber-50 hover:text-amber-700'
-    },
-    {
-      href: '/dashboard/kinship',
-      icon: GitMerge,
-      label: t('kinship'),
-      hover: 'hover:bg-blue-50 hover:text-blue-700'
-    },
-    {
-      href: '/dashboard/events',
-      icon: CalendarDays,
-      label: t('eventsTitle'),
-      hover: 'hover:bg-emerald-50 hover:text-emerald-700'
-    },
-    {
-      href: '/dashboard/gallery',
-      icon: ImageIcon,
-      label: t('galleryTitle'),
-      hover: 'hover:bg-teal-50 hover:text-teal-700'
-    },
-    {
-      href: '/dashboard/lineage/book',
-      icon: BookOpen,
-      label: t('lineageBookTitle'),
-      hover: 'hover:bg-indigo-50 hover:text-indigo-700'
-    },
-    {
-      href: '/dashboard/stats',
-      icon: BarChart2,
-      label: t('statistics'),
-      hover: 'hover:bg-purple-50 hover:text-purple-700'
-    }
-  ]
-
-  const adminLinks = [
-    {
-      href: '/dashboard/digitization',
-      icon: FileSpreadsheet,
-      label: 'Số hóa gia phả giấy',
-      hover: 'hover:bg-amber-50 hover:text-amber-800'
-    },
-    {
-      href: '/dashboard/proposals',
-      icon: FileCheck,
-      label: 'Duyệt đề xuất phả hệ',
-      hover: 'hover:bg-amber-50 hover:text-amber-800'
-    },
-    {
-      href: '/dashboard/users',
-      icon: Users,
-      label: t('manageUsers'),
-      hover: 'hover:bg-rose-50 hover:text-rose-700'
-    },
-    {
-      href: '/dashboard/lineage',
-      icon: Network,
-      label: t('lineageOrder'),
-      hover: 'hover:bg-indigo-50 hover:text-indigo-700'
-    },
-    {
-      href: '/dashboard/data',
-      icon: Database,
-      label: t('backupRestore'),
-      hover: 'hover:bg-teal-50 hover:text-teal-700'
-    },
-    {
-      href: '/dashboard/upgrade',
-      icon: ArrowUpCircle,
-      label: t('upgrade'),
-      hover: 'hover:bg-amber-50 hover:text-amber-700'
-    }
-  ]
+  const roleLabel = isAdmin
+    ? 'Quản trị viên'
+    : isEditor
+      ? 'Biên tập viên'
+      : 'Thành viên dòng họ'
 
   return (
     <div className='relative' ref={containerRef}>
@@ -139,16 +47,19 @@ export default function HeaderMenu() {
         {...buttonProps}
         aria-label={t('account')}
         onClick={toggle}
-        className='flex items-center gap-2 rounded-full border border-transparent py-1.5 pr-4 pl-2 transition-colors duration-200 hover:border-stone-200 hover:bg-stone-100'>
-        <div className='flex size-8 items-center justify-center rounded-full bg-linear-to-br from-amber-200 to-amber-100 font-medium text-amber-800 shadow-sm ring-1 ring-amber-300/50'>
+        className='flex items-center gap-2 rounded-full border border-border/80 bg-surface/60 py-1.5 pr-3 pl-1.5 transition-all duration-200 hover:border-amber-400/50 hover:bg-surface shadow-xs'>
+        <div className='flex size-8 items-center justify-center rounded-full bg-linear-to-br from-amber-200 via-amber-100 to-amber-300/80 font-serif font-bold text-amber-900 shadow-xs ring-1 ring-amber-400/30'>
           {userEmail ? (
             userEmail.charAt(0).toUpperCase()
           ) : (
             <UserCircle className='size-5' />
           )}
         </div>
+        <span className='hidden sm:inline-block max-w-[120px] truncate text-xs font-medium text-stone-700'>
+          {userEmail?.split('@')[0]}
+        </span>
         <ChevronDown
-          className={`size-4 text-stone-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+          className={`size-3.5 text-stone-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
         />
       </button>
 
@@ -156,60 +67,80 @@ export default function HeaderMenu() {
         {isOpen && (
           <m.div
             id={menuId}
-            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            initial={{ opacity: 0, y: 8, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+            exit={{ opacity: 0, y: 8, scale: 0.96 }}
             transition={{ duration: 0.15, ease: 'easeOut' }}
-            className='absolute right-0 z-50 mt-2 w-56 overflow-hidden rounded-3xl border border-border bg-surface py-2'>
-            <div className='border-b border-stone-100 bg-stone-50/50 px-4 py-3'>
-              <p className='mb-0.5 text-sm font-medium text-stone-400'>
-                {t('account')}
-              </p>
-              <p className='truncate text-sm font-medium text-stone-900'>
-                {userEmail}
-              </p>
-            </div>
-            <div className='py-1'>
-              {links.map(({ href, icon: Icon, label, hover }) => (
-                <Link
-                  key={href}
-                  href={href}
-                  onClick={close}
-                  className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-stone-700 transition-colors ${hover}`}>
-                  <Icon className='size-4' />
-                  {label}
-                </Link>
-              ))}
-
-              {isAdmin && (
-                <>
-                  <div className='mt-1 px-4 py-2'>
-                    <p className='text-sm font-medium text-rose-500'>
-                      {t('admin')}
-                    </p>
+            className='absolute right-0 z-50 mt-2 w-64 overflow-hidden rounded-2xl border border-border bg-surface shadow-xl ring-1 ring-black/5'>
+            {/* Header info card */}
+            <div className='border-b border-border/80 bg-amber-50/50 px-4 py-3'>
+              <div className='flex items-center gap-2.5'>
+                <div className='flex size-9 shrink-0 items-center justify-center rounded-full bg-amber-200/90 font-serif font-bold text-amber-900 shadow-xs'>
+                  {userEmail ? userEmail.charAt(0).toUpperCase() : 'U'}
+                </div>
+                <div className='min-w-0 flex-1'>
+                  <p className='truncate text-xs font-semibold text-stone-900'>
+                    {userEmail}
+                  </p>
+                  <div className='mt-0.5 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium bg-amber-100/80 text-amber-900'>
+                    {isAdmin ? (
+                      <Shield className='size-3 text-amber-700' />
+                    ) : (
+                      <UserCheck className='size-3 text-stone-600' />
+                    )}
+                    <span>{roleLabel}</span>
                   </div>
-                  {adminLinks.map(({ href, icon: Icon, label, hover }) => (
-                    <Link
-                      key={href}
-                      href={href}
-                      onClick={close}
-                      className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-stone-700 transition-colors ${hover}`}>
-                      <Icon className='size-4' />
-                      {label}
-                    </Link>
-                  ))}
-                </>
-              )}
+                </div>
+              </div>
+            </div>
 
-              <div className='mx-4 my-1 h-px bg-stone-100' />
+            {/* Quick Management Links for Admin/Editor */}
+            {(isAdmin || isEditor) && (
+              <div className='border-b border-border/60 py-1.5 px-1'>
+                <p className='px-3 py-1 text-[11px] font-semibold tracking-wider text-amber-900/60 uppercase'>
+                  Khu vực Quản trị
+                </p>
+                <Link
+                  href='/dashboard/proposals'
+                  onClick={close}
+                  className='flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium text-stone-700 hover:bg-amber-50/80 hover:text-amber-900 transition-colors'>
+                  <FileCheck className='size-4 text-amber-700' />
+                  <span>Duyệt đề xuất</span>
+                </Link>
+                {isAdmin && (
+                  <>
+                    <Link
+                      href='/dashboard/users'
+                      onClick={close}
+                      className='flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium text-stone-700 hover:bg-amber-50/80 hover:text-amber-900 transition-colors'>
+                      <Users className='size-4 text-amber-700' />
+                      <span>Quản lý thành viên</span>
+                    </Link>
+                    <Link
+                      href='/dashboard/data'
+                      onClick={close}
+                      className='flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium text-stone-700 hover:bg-amber-50/80 hover:text-amber-900 transition-colors'>
+                      <Database className='size-4 text-amber-700' />
+                      <span>Sao lưu & Dữ liệu</span>
+                    </Link>
+                  </>
+                )}
+              </div>
+            )}
+
+            {/* General Utilities & Logout */}
+            <div className='py-1.5 px-1'>
               <Link
                 href='/about'
                 onClick={close}
-                className='flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-stone-700 transition-colors hover:bg-rose-50 hover:text-rose-700'>
-                <Info className='size-4' />
-                {t('about')}
+                className='flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium text-stone-700 hover:bg-amber-50/80 hover:text-amber-900 transition-colors'>
+                <Info className='size-4 text-stone-500' />
+                <span>Giới thiệu & Hướng dẫn</span>
               </Link>
-              <LogoutButton />
+              <div className='my-1 border-t border-border/60' />
+              <div className='px-1'>
+                <LogoutButton />
+              </div>
             </div>
           </m.div>
         )}
