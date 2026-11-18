@@ -29,11 +29,11 @@ export default async function DashboardLayout({
   if (!profile?.is_active) {
     return (
       <div className='flex min-h-screen flex-col bg-neutral font-sans text-primary'>
-        <header className='sticky top-0 z-30 border-b border-stone-200 bg-white/80 transition-colors duration-200'>
+        <header className='sticky top-0 z-30 border-b border-[#ebded2] bg-white/80 backdrop-blur-md transition-colors duration-200'>
           <div className='mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8'>
             <div className='flex items-center gap-4'>
               <Link href='/' className='group flex items-center gap-2'>
-                <h1 className='font-serif text-xl font-semibold text-stone-800 transition-colors group-hover:text-amber-700 sm:text-2xl'>
+                <h1 className='font-serif text-xl font-semibold text-[#4a2818] transition-colors group-hover:text-amber-800 sm:text-2xl'>
                   {config.siteName}
                 </h1>
               </Link>
@@ -46,9 +46,10 @@ export default async function DashboardLayout({
             </div>
           </div>
         </header>
-        <main className='flex flex-1 flex-col items-center justify-center p-4'>
-          <div className='card-feature w-full max-w-md text-center'>
-            <div className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 text-amber-600'>
+
+        <main className='flex flex-1 flex-col items-center justify-center p-4 py-12'>
+          <div className='w-full max-w-lg rounded-3xl border border-[#ebded2] bg-white/90 p-8 text-center backdrop-blur-xl shadow-xs sm:p-10'>
+            <div className='mx-auto mb-5 flex size-16 items-center justify-center rounded-2xl bg-amber-50 ring-1 ring-amber-200 text-[#4a2818]'>
               <svg
                 className='size-8'
                 fill='none'
@@ -62,16 +63,57 @@ export default async function DashboardLayout({
                 />
               </svg>
             </div>
-            <h2 className='mb-2 font-serif text-2xl font-semibold text-stone-800'>
+
+            <div className='inline-flex items-center gap-1.5 rounded-full bg-amber-100/80 px-3 py-1 text-xs font-semibold text-amber-900 mb-3'>
+              <span>✦</span>
+              <span>Tài Khoản Đang Chờ Duyệt</span>
+              <span>✦</span>
+            </div>
+
+            <h2 className='mb-2.5 font-serif text-2xl font-semibold text-[#4a2818] sm:text-3xl'>
               {t('pendingTitle')}
             </h2>
-            <p className='text-stone-600'>{t('pendingDescription')}</p>
-            <p className='mt-4 text-sm text-stone-500 italic'>
-              {t('pendingNote')}
+
+            <p className='text-sm leading-relaxed text-stone-600 sm:text-base'>
+              {t('pendingDescription')}
             </p>
+
+            <div className='mt-6 rounded-2xl border border-[#ebded2] bg-[#faf7f2] p-4 text-left text-xs sm:text-sm text-stone-700 space-y-2'>
+              <p className='font-semibold text-[#4a2818]'>
+                Thông tin tài khoản:
+              </p>
+              <div className='flex items-center justify-between text-stone-600'>
+                <span>Email đăng ký:</span>
+                <span className='font-medium text-stone-900'>{user.email}</span>
+              </div>
+              <div className='flex items-center justify-between text-stone-600'>
+                <span>Trạng thái:</span>
+                <span className='font-medium text-amber-800'>Chờ Ban Trị Sự kích hoạt</span>
+              </div>
+              <div className='border-t border-[#ebded2] pt-2 mt-2'>
+                <p className='font-semibold text-[#4a2818] mb-1'>Liên hệ Ban Trị Sự Dòng Họ:</p>
+                <p className='text-stone-600'>
+                  {t('clanCouncilContact')}
+                </p>
+              </div>
+            </div>
+
+            <div className='mt-6 flex flex-col sm:flex-row gap-3 justify-center'>
+              <Link
+                href='/dashboard'
+                className='inline-flex items-center justify-center rounded-xl bg-[#4a2818] px-5 py-3 text-sm font-medium text-white shadow-xs transition duration-200 hover:bg-[#381e12]'>
+                Kiểm tra lại trạng thái
+              </Link>
+              <Link
+                href='/'
+                className='inline-flex items-center justify-center rounded-xl border border-[#ebded2] bg-white px-5 py-3 text-sm font-medium text-stone-700 transition duration-200 hover:bg-[#faf7f2]'>
+                Trang chủ dòng họ
+              </Link>
+            </div>
           </div>
         </main>
-        <Footer className='mt-auto border-t border-stone-200 bg-white' />
+
+        <Footer className='mt-auto border-t border-[#ebded2] bg-white' />
       </div>
     )
   }
