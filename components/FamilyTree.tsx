@@ -10,11 +10,13 @@ import {
   useState,
   useSyncExternalStore
 } from 'react'
+import { Sparkles } from 'lucide-react'
 
 import FamilyTreeNodeRenderer, {
   TreeRenderContext
 } from '@/components/FamilyTreeNodeRenderer'
 import TreeLinesStyle from '@/components/TreeLinesStyle'
+import MemberSideDrawer from '@/components/tree/MemberSideDrawer'
 import { useMemberListView } from '@/context/useMemberListView'
 import { usePanZoom } from '@/hooks/usePanZoom'
 import { useI18n } from '@/lib/i18n/useI18n'
@@ -45,6 +47,9 @@ export default function FamilyTree({
 }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const keyboardHintId = useId()
+  const [treeMode, setTreeMode] = useState<'compact' | 'detailed'>('detailed')
+  const [selectedPersonId, setSelectedPersonId] = useState<string | null>(null)
+
   const [hideDaughtersInLaw, setHideDaughtersInLaw] = useState(false)
   const [hideSonsInLaw, setHideSonsInLaw] = useState(false)
   const [hideDaughters, setHideDaughters] = useState(false)
@@ -56,6 +61,34 @@ export default function FamilyTree({
   const [autoCollapseLevel, setAutoCollapseLevel] = useState(
     DEFAULT_AUTO_COLLAPSE_LEVEL
   )
+
+  // Lineage Breadcrumb & Path Highlighting
+  const { lineagePath, highlightedLineage } = useMemo(() => {
+    if (!selectedPersonId || !personsMap.has(selectedPersonId)) {
+      return { lineagePath: [], highlightedLineage: new Set<string>() }
+    }
+    const path: Person[] = []
+    const set = new Set<string>()
+    let curr: string | undefined = selectedPersonId
+    const visited = new Set<string>()
+
+    while (curr && !visited.has(curr)) {
+      visited.add(curr)
+      const p = personsMap.get(curr)
+      if (p) {
+        path.unshift(p)
+        set.add(p.id)
+      }
+      const parentRel = relationships.find(
+        (r) =>
+          (r.type === 'biological_child' || r.type === 'adopted_child') &&
+          r.person_b === curr
+      )
+      curr = parentRel?.person_a
+    }
+
+    return { lineagePath: path, highlightedLineage: set }
+  }, [selectedPersonId, personsMap, relationships])
 
   const treeRef = useRef<HTMLDivElement>(null)
   // Unscaled size of the tree (transforms don't change offsetWidth/Height).
@@ -260,13 +293,15 @@ export default function FamilyTree({
     )
 
   return (
-    <div className='relative h-full w-full'>
+    <div className='relative h-full w-full flex flex-col overflow-hidden'>
       <TreeToolbar
         scale={scale}
         handleZoomIn={handleZoomIn}
         handleZoomOut={handleZoomOut}
         handleResetZoom={handleResetZoom}
         handleCenter={handleCenter}
+        treeMode={treeMode}
+        setTreeMode={setTreeMode}
         hideExpandButtons={hideExpandButtons}
         setHideExpandButtons={setHideExpandButtons}
         autoCollapseLevel={autoCollapseLevel}
@@ -286,17 +321,51 @@ export default function FamilyTree({
         canEdit={canEdit}
       />
 
+      {/* ── Breadcrumb Huyết Thống Cố Định ── */}
+      {lineagePath.length > 0 && (
+        <div className='flex items-center gap-1.5 overflow-x-auto whitespace-nowrap border-b border-[#EBDED2] bg-[#FAF7F2] px-4 py-2 text-xs text-[#786C65] shrink-0 z-20'>
+          <span className='font-semibold text-[#4A2818] flex items-center gap-1'>
+            <Sparkles className='size-3 text-[#C2671A]' />
+            Huyết Thống:
+          </span>
+          {lineagePath.map((p, idx) => (
+            <span key={p.id} className='flex items-center gap-1.5'>
+              {idx > 0 && <span className='text-stone-300'>›</span>}
+              <button
+                type='button'
+                onClick={() => setSelectedPersonId(p.id)}
+                className={`rounded px-1.5 py-0.5 transition ${
+                  p.id === selectedPersonId
+                    ? 'bg-[#C2671A] text-white font-bold shadow-2xs'
+                    : 'text-[#4A2818] hover:underline'
+                }`}>
+                {p.full_name} {p.generation ? `(Đ${p.generation})` : ''}
+              </button>
+            </span>
+          ))}
+          <button
+            type='button'
+            onClick={() => setSelectedPersonId(null)}
+            className='ml-2 text-stone-400 hover:text-stone-600 text-[11px] underline'>
+            Bỏ chọn
+          </button>
+        </div>
+      )}
+
       <div
         ref={containerRef}
         role='group'
         aria-label={t('treeCanvasLabel')}
         aria-describedby={keyboardHintId}
-        className={`h-full w-full [touch-action:pan-x_pan-y] overflow-auto bg-stone-50 ${isPressed ? 'cursor-grabbing' : 'cursor-grab'}`}
+        className={`flex-1 w-full [touch-action:pan-x_pan-y] overflow-auto bg-[#FAF7F2] ${isPressed ? 'cursor-grabbing' : 'cursor-grab'}`}
         tabIndex={0}
         onKeyDown={(e) => {
           // Keyboard users get the same "release" affordance as mouse users:
           // Escape cancels a grab/drag state on the canvas.
-          if (e.key === 'Escape') handlePointerUpOrLeave()
+          if (e.key === 'Escape') {
+            handlePointerUpOrLeave()
+            setSelectedPersonId(null)
+          }
           handleKeyDown(e)
         }}
         onPointerDown={handlePointerDown}
@@ -345,11 +414,24 @@ export default function FamilyTree({
                 showAvatar={showAvatar}
                 hideExpandButtons={hideExpandButtons}
                 toggleCollapse={toggleCollapse}
+                treeMode={treeMode}
+                selectedPersonId={selectedPersonId}
+                onSelectPerson={setSelectedPersonId}
+                highlightedLineage={highlightedLineage}
               />
             </ul>
           </div>
         </div>
       </div>
+
+      {/* ── Side Drawer Hồ Sơ Thành Viên ── */}
+      <MemberSideDrawer
+        person={selectedPersonId ? personsMap.get(selectedPersonId) ?? null : null}
+        onClose={() => setSelectedPersonId(null)}
+        personsMap={personsMap}
+        relationships={relationships}
+        onSelectPerson={setSelectedPersonId}
+      />
     </div>
   )
 }
@@ -366,7 +448,11 @@ function MemoizedNodeTree({
   autoCollapsed,
   showAvatar,
   hideExpandButtons,
-  toggleCollapse
+  toggleCollapse,
+  treeMode,
+  selectedPersonId,
+  onSelectPerson,
+  highlightedLineage
 }: { roots: Person[] } & TreeRenderContext) {
   const ctx = useMemo(
     () => ({
@@ -375,7 +461,11 @@ function MemoizedNodeTree({
       autoCollapsed,
       showAvatar,
       hideExpandButtons,
-      toggleCollapse
+      toggleCollapse,
+      treeMode,
+      selectedPersonId,
+      onSelectPerson,
+      highlightedLineage
     }),
     [
       getTreeData,
@@ -383,7 +473,11 @@ function MemoizedNodeTree({
       autoCollapsed,
       showAvatar,
       hideExpandButtons,
-      toggleCollapse
+      toggleCollapse,
+      treeMode,
+      selectedPersonId,
+      onSelectPerson,
+      highlightedLineage
     ]
   )
   return <FamilyTreeNodeRenderer roots={roots} ctx={ctx} />

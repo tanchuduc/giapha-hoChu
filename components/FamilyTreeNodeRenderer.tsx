@@ -25,6 +25,10 @@ export interface TreeRenderContext {
   hideExpandButtons: boolean
   /** The button is passed so the tree can keep it under the pointer. */
   toggleCollapse: (personId: string, button: HTMLElement) => void
+  treeMode?: 'compact' | 'detailed'
+  selectedPersonId?: string | null
+  onSelectPerson?: (id: string) => void
+  highlightedLineage?: ReadonlySet<string>
 }
 
 /**
@@ -50,14 +54,14 @@ export function TreeExpandToggle({
         e.preventDefault()
         onToggle(e.currentTarget)
       }}
-      className='absolute -bottom-3.5 left-1/2 z-100 flex size-7 -translate-x-1/2 items-center justify-center rounded-full border border-stone-300 bg-white text-stone-600 shadow-xs transition-all hover:border-amber-400 hover:text-amber-700 active:scale-95 active:bg-amber-50 before:absolute before:-inset-2.5 before:content-[""]'
+      className='absolute -bottom-3 left-1/2 z-100 flex size-6 -translate-x-1/2 items-center justify-center rounded-full border border-[#EBDED2] bg-white text-[#786C65] shadow-xs transition-all hover:border-[#C2671A] hover:text-[#C2671A] hover:scale-110 active:scale-95 active:bg-amber-50 before:absolute before:-inset-2 before:content-[""]'
       title={isCollapsed ? t('expand') : t('collapse')}
       aria-label={t('branchOf', { name })}
       aria-expanded={!isCollapsed}>
       {isCollapsed ? (
-        <Plus className='h-3.5 w-3.5' />
+        <Plus className='h-3 w-3' />
       ) : (
-        <Minus className='h-3.5 w-3.5' />
+        <Minus className='h-3 w-3' />
       )}
     </button>
   )
@@ -97,6 +101,7 @@ const TreeNode = memo(function TreeNode({
 
   const hasChildren = data.children.length > 0
   const isCollapsed = branch === 'collapsed'
+  const isMainHighlighted = ctx.highlightedLineage?.has(data.person.id) ?? false
 
   return (
     <li>
@@ -104,9 +109,14 @@ const TreeNode = memo(function TreeNode({
         className='node-container inline-flex flex-col items-center'
         data-level={level}>
         {/* Main Person & Spouses Row */}
-        <div
-          className={`relative z-10 flex h-full items-stretch ${ctx.showAvatar ? 'rounded-2xl border border-stone-200/80 bg-white' : ''}`}>
-          <FamilyNodeCard person={data.person} level={level} />
+        <div className='relative z-10 flex h-full items-center gap-2'>
+          <FamilyNodeCard
+            person={data.person}
+            level={level}
+            treeMode={ctx.treeMode ?? 'detailed'}
+            isHighlighted={isMainHighlighted || ctx.selectedPersonId === data.person.id}
+            onClickCard={() => ctx.onSelectPerson?.(data.person!.id)}
+          />
 
           {data.spouses.map((spouseData, idx) => (
             <div key={spouseData.person.id} className='relative flex'>
@@ -115,6 +125,9 @@ const TreeNode = memo(function TreeNode({
                 isPlusVisible={idx > 0}
                 person={spouseData.person}
                 level={level}
+                treeMode={ctx.treeMode ?? 'detailed'}
+                isHighlighted={ctx.selectedPersonId === spouseData.person.id}
+                onClickCard={() => ctx.onSelectPerson?.(spouseData.person.id)}
               />
             </div>
           ))}

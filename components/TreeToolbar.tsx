@@ -12,6 +12,8 @@ interface TreeToolbarProps extends BaseToolbarProps {
   handleZoomOut: () => void
   handleResetZoom: () => void
   handleCenter: () => void
+  treeMode?: 'compact' | 'detailed'
+  setTreeMode?: (mode: 'compact' | 'detailed') => void
 }
 
 type TreeToolbarControlsProps = Pick<
@@ -21,6 +23,8 @@ type TreeToolbarControlsProps = Pick<
   | 'handleZoomOut'
   | 'handleResetZoom'
   | 'handleCenter'
+  | 'treeMode'
+  | 'setTreeMode'
 >
 
 export function TreeToolbarControls({
@@ -28,12 +32,40 @@ export function TreeToolbarControls({
   handleZoomIn,
   handleZoomOut,
   handleResetZoom,
-  handleCenter
+  handleCenter,
+  treeMode = 'detailed',
+  setTreeMode
 }: TreeToolbarControlsProps) {
   const { t } = useI18n()
 
   return (
     <>
+      {/* Mode Switcher: Compact vs Detailed */}
+      {setTreeMode && (
+        <div className='flex h-10 items-center overflow-hidden rounded-full border border-[#EBDED2] bg-white/90 p-1 backdrop-blur-md shadow-xs'>
+          <button
+            type='button'
+            onClick={() => setTreeMode('compact')}
+            className={`rounded-full px-3 py-1 text-xs font-semibold transition-all ${
+              treeMode === 'compact'
+                ? 'bg-[#4A2818] text-white shadow-xs'
+                : 'text-[#786C65] hover:text-[#4A2818]'
+            }`}>
+            Gọn
+          </button>
+          <button
+            type='button'
+            onClick={() => setTreeMode('detailed')}
+            className={`rounded-full px-3 py-1 text-xs font-semibold transition-all ${
+              treeMode === 'detailed'
+                ? 'bg-[#4A2818] text-white shadow-xs'
+                : 'text-[#786C65] hover:text-[#4A2818]'
+            }`}>
+            Chi tiết
+          </button>
+        </div>
+      )}
+
       {/* Zoom Controls */}
       <div className='flex h-10 items-center overflow-hidden rounded-full border border-stone-200/60 bg-white/80 backdrop-blur-md transition-opacity'>
         <button
@@ -82,6 +114,8 @@ export default function TreeToolbar({
   handleZoomOut,
   handleResetZoom,
   handleCenter,
+  treeMode,
+  setTreeMode,
   ...baseProps
 }: TreeToolbarProps) {
   return (
@@ -92,6 +126,8 @@ export default function TreeToolbar({
         handleZoomOut={handleZoomOut}
         handleResetZoom={handleResetZoom}
         handleCenter={handleCenter}
+        treeMode={treeMode}
+        setTreeMode={setTreeMode}
       />
     </BaseToolbar>
   )

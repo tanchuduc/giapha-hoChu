@@ -26,12 +26,12 @@ export default function TreeLinesStyle() {
         .css-tree li::before, .css-tree li::after {
           content: '';
           position: absolute; top: 0; right: 50%;
-          border-top: 2px solid #d6d3d1;
+          border-top: 2px solid #D8C8B8;
           width: 50%; height: 30px;
         }
         .css-tree li::after {
           right: auto; left: 50%;
-          border-left: 2px solid #d6d3d1;
+          border-left: 2px solid #D8C8B8;
         }
 
         /* Remove left-right connectors from elements without siblings */
@@ -43,7 +43,7 @@ export default function TreeLinesStyle() {
           position: absolute;
           top: 0;
           left: 50%;
-          border-left: 2px solid #d6d3d1;
+          border-left: 2px solid #D8C8B8;
           width: 0;
           height: 30px;
         }
@@ -63,7 +63,7 @@ export default function TreeLinesStyle() {
 
         /* Add back the vertical connector to the last nodes */
         .css-tree li:last-child::before {
-          border-right: 2px solid #d6d3d1;
+          border-right: 2px solid #D8C8B8;
           border-radius: 0 12px 0 0;
         }
         .css-tree li:first-child::after {
@@ -74,7 +74,7 @@ export default function TreeLinesStyle() {
         .css-tree ul ul::before {
           content: '';
           position: absolute; top: 0; left: 50%;
-          border-left: 2px solid #d6d3d1;
+          border-left: 2px solid #D8C8B8;
           width: 0; height: 30px;
         }
       `
